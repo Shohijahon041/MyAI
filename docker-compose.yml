@@ -1,0 +1,26 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: myai-ollama
+
+    ports:
+      - "11434:11434"
+
+    environment:
+      OLLAMA_MODELS: /models
+
+    volumes:
+      - ./data/ollama:/root/.ollama
+      - ./models/ollama:/models
+
+    restart: unless-stopped
+
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+networks:
+  default:
+    name: myai-network
