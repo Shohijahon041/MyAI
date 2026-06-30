@@ -5,11 +5,12 @@ from apps.api.services.ollama_service import generate
 
 app = FastAPI(
     title="MyAI",
-    version="0.4.1"
+    version="0.5.2"
 )
 
 
 class ChatRequest(BaseModel):
+    user_id: str
     message: str
 
 
@@ -17,14 +18,18 @@ class ChatRequest(BaseModel):
 def root():
     return {
         "name": "MyAI",
-        "version": "0.4.1",
-        "status": "running"
+        "status": "running",
+        "version": "0.5.2"
     }
 
 
 @app.post("/chat")
 def chat(request: ChatRequest):
-    answer = generate(request.message)
+
+    answer = generate(
+        request.user_id,
+        request.message
+    )
 
     return {
         "reply": answer
